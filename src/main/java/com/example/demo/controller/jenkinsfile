@@ -1,0 +1,90 @@
+pipeline {
+
+    agent any
+
+    tools {
+        maven 'Maven'
+        jdk 'JDK17'
+    }
+
+    environment {
+
+        APP_NAME = "springboot-demo"
+        APP_DIR = "/opt/springboot-app"
+        JAR_NAME = "demo-0.0.1-SNAPSHOT.jar"
+    }
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+
+                git branch: 'main',
+                url: 'https://github.com/YOUR_USERNAME/YOUR_REPO.git'
+            }
+        }
+
+        stage('Build Application') {
+            steps {
+
+                sh './mvnw clean package'
+            }
+        }
+
+        stage('Run Unit Tests') {
+            steps {
+
+                sh './mvnw test'
+            }
+        }
+
+        stage('Deploy Application') {
+            steps {
+
+                sh """
+
+                echo "Stopping old application if running..."
+
+                pkill -f '${JAR_NAME}' || true
+
+                echo "Copying new JAR..."
+
+                cp target/${JAR_NAME} ${APP_DIR}/
+
+                echo "Starting application..."
+
+                nohup java -jar ${APP_DIR}/${JAR_NAME} > ${APP_DIR}/app.log 2>&1 &
+
+                """
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+
+                sh """
+
+                sleep 15
+
+                curl http://localhost:8080
+
+                """
+            }
+        }
+    }
+
+    post {
+
+        success {
+            echo 'Application deployed successfully'
+        }
+
+        failure {
+            echo 'Deployment failed'
+        }
+
+        always {
+            cleanWs()
+        }
+    }
+}
