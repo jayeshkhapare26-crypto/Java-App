@@ -66,7 +66,7 @@ pipeline {
 
                 sleep 15
 
-                curl http://localhost:8080
+                curl https://github.com/akshaymangale555-web/jenkins_java.git
 
                 """
             }
