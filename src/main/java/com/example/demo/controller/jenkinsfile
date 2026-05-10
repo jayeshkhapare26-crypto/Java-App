@@ -15,7 +15,7 @@ pipeline {
             steps {
 
                 git branch: 'main',
-                url: 'https://github.com/YOUR_USERNAME/YOUR_REPO.git'
+                url: 'https://github.com/akshaymangale555-web/jenkins_java.git'
             }
         }
 
@@ -61,7 +61,7 @@ pipeline {
 
                 sleep 15
 
-                curl https://github.com/akshaymangale555-web/jenkins_java.git
+                curl http://localhost:9090
 
                 """
             }
