@@ -18,5 +18,4 @@ ENTRYPOINT [ "java", \
   "-XX:+UseContainerSupport", \
   "-XX:MaxRAMPercentage=75.0", \
   "-jar", \
-  "app.jar"
-]
+  "app.jar"]
